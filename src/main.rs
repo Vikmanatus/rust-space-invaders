@@ -9,7 +9,7 @@ use crossterm::{
 };
 use rusty_audio::Audio;
 
-use crate::game_utils::{NUM_COLS, NUM_ROWS, add_sounds,};
+use crate::game_utils::{NUM_COLS, NUM_ROWS, add_sounds, render::render_welcome_screen,};
 
 fn main() -> Result<(), Box<dyn Error>> {
     println!("Welcome to space invaders Rust version");
@@ -27,8 +27,8 @@ fn main() -> Result<(), Box<dyn Error>> {
     stdout.execute(EnterAlternateScreen)?;
     stdout.execute(Hide)?;
     audio.play("welcome");
+    
     // We will need a game loop in which we can create the elements of the game
-    // We have to support keyboard commands, so in this game loop we will also take care of taking the commands
     'gameloop: loop {
         while poll(Duration::default())? {
             if let Event::Key(key_code) = read()? {
@@ -41,7 +41,11 @@ fn main() -> Result<(), Box<dyn Error>> {
             }
         }
     }
-    audio.wait(); // Block until sounds finish playing
+    
+    audio.wait(); // Block until sounds welcome sound finishes playing
+
+
+    // Killing the app and terminating the program
     // Need to create a render engine so we can draw elements into the terminal
     stdout.execute(Show)?;
     // Return to the original terminal

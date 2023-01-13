@@ -5,6 +5,19 @@
 // So NUM_ROWS will correspond to the height
 // And NUM_COLS will correspond to the width
 
+// The first method we need to do is to create a welcome screen
+
+use std::io::{Stdout, Write};
+
+use crossterm::{QueueableCommand, style::{SetBackgroundColor, Color}, terminal::{Clear, ClearType}, ExecutableCommand};
+
+// So as for the game rendering,  we will need to have access to a terminal, in that way we will be able to customize the screen
+pub fn render_welcome_screen(stdout: &mut Stdout) {
+    stdout.queue(SetBackgroundColor(Color::Cyan)).unwrap();
+    stdout.queue(Clear(ClearType::All)).unwrap();
+    stdout.flush().unwrap();
+}
+
 // To render we need to have an access to the terminal
 pub fn render() {
     
