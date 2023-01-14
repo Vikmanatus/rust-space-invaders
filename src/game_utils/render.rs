@@ -9,17 +9,31 @@
 
 use std::io::{Stdout, Write};
 
-use crossterm::{QueueableCommand, style::{SetBackgroundColor, Color}, terminal::{Clear, ClearType,}, ExecutableCommand};
+use crossterm::{
+    cursor::MoveTo,
+    style::{Color, SetBackgroundColor},
+    terminal::{self, Clear, ClearType},
+    ExecutableCommand, QueueableCommand,
+};
 
 // So as for the game rendering,  we will need to have access to a terminal, in that way we will be able to customize the screen
 pub fn render_welcome_screen(stdout: &mut Stdout) {
-    //stdout.execute(SetBackgroundColor(Color::Blue)).unwrap();
+    stdout.execute(SetBackgroundColor(Color::Blue)).unwrap();
     stdout.execute(Clear(ClearType::All)).unwrap();
-    stdout.write(b"Some value in terminal").unwrap();
+    let dimnesions = terminal::size().unwrap();
+    let welcome_text = b"Welcome to space-invaders rust";
+    stdout
+        .execute(MoveTo(dimnesions.0/2, dimnesions.1/10))
+        .unwrap();
+    stdout.write_all(welcome_text).unwrap();
+    stdout.execute(MoveTo(dimnesions.0/4, dimnesions.1/8)).unwrap();
+    stdout.write_all(b"Play game").unwrap();
+
+
+    // To get the center we need to devide the values by 2
+    println!("\n");
     // stdout.write(b"Welcome to rust-space-invaders").unwrap();
 }
 
 // To render we need to have an access to the terminal
-pub fn render() {
-    
-}
+pub fn render() {}

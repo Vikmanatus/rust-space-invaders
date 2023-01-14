@@ -26,7 +26,6 @@ fn main() -> Result<(), Box<dyn Error>> {
     // Hiding content of users terminal and providing a similar result as a vim editor in which we can draw and render the elements of the game
     stdout.execute(EnterAlternateScreen)?;
     stdout.execute(Hide)?;
-
     // audio.play("welcome");
     render_welcome_screen(&mut stdout);
 
@@ -49,9 +48,9 @@ fn main() -> Result<(), Box<dyn Error>> {
 
     // Killing the app and terminating the program
     // Need to create a render engine so we can draw elements into the terminal
-    // stdout.execute(Show)?;
-    // // Return to the original terminal
-    // stdout.execute(LeaveAlternateScreen)?;
+    stdout.execute(Show)?;
+    // Return to the original terminal
+    stdout.execute(LeaveAlternateScreen)?;
     terminal::disable_raw_mode()?;
     Ok(())
 }
