@@ -7,3 +7,4 @@ Please open a terminal and run the following command:
 ```bash
 cargo run
 ```
+

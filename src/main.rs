@@ -27,8 +27,8 @@ fn main() -> Result<(), Box<dyn Error>> {
     stdout.execute(EnterAlternateScreen)?;
     stdout.execute(Hide)?;
 
-    audio.play("welcome");
-
+    // audio.play("welcome");
+    render_welcome_screen(&mut stdout);
 
 
     // We will need a game loop in which we can create the elements of the game
@@ -49,9 +49,9 @@ fn main() -> Result<(), Box<dyn Error>> {
 
     // Killing the app and terminating the program
     // Need to create a render engine so we can draw elements into the terminal
-    stdout.execute(Show)?;
-    // Return to the original terminal
-    stdout.execute(LeaveAlternateScreen)?;
+    // stdout.execute(Show)?;
+    // // Return to the original terminal
+    // stdout.execute(LeaveAlternateScreen)?;
     terminal::disable_raw_mode()?;
     Ok(())
 }
