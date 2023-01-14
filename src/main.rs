@@ -30,6 +30,7 @@ fn main() -> Result<(), Box<dyn Error>> {
     
     // We will need a game loop in which we can create the elements of the game
     'gameloop: loop {
+        render_welcome_screen(&mut stdout);
         while poll(Duration::default())? {
             if let Event::Key(key_code) = read()? {
                 match key_code.code {
@@ -42,7 +43,7 @@ fn main() -> Result<(), Box<dyn Error>> {
         }
     }
     
-    audio.wait(); // Block until sounds welcome sound finishes playing
+    // audio.wait(); // Block until sounds welcome sound finishes playing
 
 
     // Killing the app and terminating the program
