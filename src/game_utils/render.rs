@@ -9,13 +9,15 @@
 
 use std::io::{Stdout, Write};
 
-use crossterm::{QueueableCommand, style::{SetBackgroundColor, Color}, terminal::{Clear, ClearType}, ExecutableCommand};
+use crossterm::{QueueableCommand, style::{SetBackgroundColor, Color}, terminal::{Clear, ClearType,}, ExecutableCommand};
 
 // So as for the game rendering,  we will need to have access to a terminal, in that way we will be able to customize the screen
 pub fn render_welcome_screen(stdout: &mut Stdout) {
-    stdout.queue(SetBackgroundColor(Color::Cyan)).unwrap();
-    stdout.queue(Clear(ClearType::All)).unwrap();
-    stdout.flush().unwrap();
+    // stdout.queue(SetBackgroundColor(Color::Blue)).unwrap();
+    // stdout.queue(Clear(ClearType::All)).unwrap();
+    // stdout.flush().unwrap();
+    stdout.write(b"Some value in terminal").unwrap();
+    // stdout.write(b"Welcome to rust-space-invaders").unwrap();
 }
 
 // To render we need to have an access to the terminal
