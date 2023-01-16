@@ -16,35 +16,21 @@ use crossterm::{
     ExecutableCommand, QueueableCommand,
 };
 
-use crate::styles::{render_background_color, get_terminal_dimensions};
+use crate::styles::{get_terminal_dimensions, render_background_color, write_text_in_terminal};
 
 // So as for the game rendering,  we will need to have access to a terminal, in that way we will be able to customize the screen
 pub fn render_welcome_screen(stdout: &mut Stdout) {
     // stdout.execute(SetBackgroundColor(Color::Blue)).unwrap();
     // stdout.execute(Clear(ClearType::All)).unwrap();
-    render_background_color(stdout);
+    render_background_color(stdout, true);
     let dimnesions = get_terminal_dimensions();
     let welcome_text = b"Welcome to space-invaders rust";
-    stdout
-        .execute(MoveTo(dimnesions.0 / 2, dimnesions.1 / 10))
-        .unwrap();
-    stdout.write_all(welcome_text).unwrap();
-    stdout
-        .execute(MoveTo(dimnesions.0 / 4, dimnesions.1 / 8))
-        .unwrap();
+    write_text_in_terminal(stdout, dimnesions.0 / 2, dimnesions.1 / 10, welcome_text);
     stdout.execute(SetBackgroundColor(Color::White)).unwrap();
-    stdout.write_all(b"Play game").unwrap();
-    stdout.execute(SetBackgroundColor(Color::Blue)).unwrap();
-    
-    stdout
-        .execute(MoveTo(dimnesions.0 / 4, dimnesions.1 / 4))
-        .unwrap();
-    stdout.write_all(b"Options").unwrap();
-    stdout
-        .execute(MoveTo(dimnesions.0 / 4, dimnesions.1 / 3))
-        .unwrap();
-    stdout.write_all(b"Quit game").unwrap();
-
+    write_text_in_terminal(stdout, dimnesions.0 / 4, dimnesions.1 / 8, b"Play game");
+    render_background_color(stdout, false);
+    write_text_in_terminal(stdout, dimnesions.0 / 4, dimnesions.1 / 4, b"Options");
+    write_text_in_terminal(stdout, dimnesions.0 / 4, dimnesions.1 / 3, b"Quit game");
     // To get the center we need to devide the values by 2
     println!("\n");
     // stdout.write(b"Welcome to rust-space-invaders").unwrap();
