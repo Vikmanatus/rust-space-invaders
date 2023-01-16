@@ -1,4 +1,5 @@
 mod game_utils;
+mod styles;
 use std::{error::Error, io::stdout, time::Duration};
 
 use crossterm::{
@@ -26,7 +27,7 @@ fn main() -> Result<(), Box<dyn Error>> {
     // Hiding content of users terminal and providing a similar result as a vim editor in which we can draw and render the elements of the game
     stdout.execute(EnterAlternateScreen)?;
     stdout.execute(Hide)?;
-    // audio.play("welcome");
+    audio.play("welcome");
     render_welcome_screen(&mut stdout);
 
 
@@ -54,3 +55,44 @@ fn main() -> Result<(), Box<dyn Error>> {
     terminal::disable_raw_mode()?;
     Ok(())
 }
+
+
+// use crossterm::{event::{read, Event, KeyCode}, terminal::enable_raw_mode};
+
+// fn main() {
+//     enable_raw_mode().unwrap();
+
+//     let mut selected_option = 1;
+
+//     loop {
+//         println!("Welcome to my game!");
+//         println!("1. Start game");
+//         println!("2. Options");
+//         println!("3. Exit");
+
+//         match read().unwrap() {
+//             Event::Key(key) => {
+//                 match key.code {
+//                     KeyCode::Up => {
+//                         if selected_option > 1 {
+//                             selected_option -= 1;
+//                         }
+//                     }
+//                     KeyCode::Down => {
+//                         if selected_option < 3 {
+//                             selected_option += 1;
+//                         }
+//                     }
+//                     KeyCode::Enter => match selected_option {
+//                         1 => start_game(),
+//                         2 => options(),
+//                         3 => exit(),
+//                         _ => continue,
+//                     },
+//                     _ => continue,
+//                 }
+//             }
+//             _ => continue,
+//         }
+//     }
+// }
