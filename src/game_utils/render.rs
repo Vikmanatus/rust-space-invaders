@@ -24,8 +24,7 @@ pub fn render_welcome_screen(stdout: &mut Stdout) {
     write_menu_options(stdout, menu_items, dimnesions.1 / 7);
 
     println!("\n");
-    // stdout.write(b"Welcome to rust-space-invaders").unwrap();
 }
 
 // To render we need to have an access to the terminal
-pub fn render() {}
+// pub fn render() {}

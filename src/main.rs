@@ -48,7 +48,6 @@ fn main() -> Result<(), Box<dyn Error>> {
                         }
                     }
                     KeyCode::Down => {
-                        let debug="";
                         if current_menu_index + 1 < MENU_ITEMS.len() as i32 {
                             current_menu_index+=1;
                             style_menu_index(&mut stdout, current_menu_index, MenuResetRequired::DownKey);
