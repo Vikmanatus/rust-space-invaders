@@ -20,7 +20,7 @@ pub fn render_background_color(stdout: &mut Stdout, clear: bool) {
 pub fn get_terminal_dimensions() -> (u16, u16) {
     size().unwrap()
 }
-pub fn write_menu_options(stdout: &mut Stdout, menu_options: [&str; 8], initial_y: u16) {
+pub fn write_menu_options(stdout: &mut Stdout, menu_options: [&str; 9], initial_y: u16) {
     let mut y_position = initial_y + 1;
     for item in menu_options {
         write_centered_text(stdout, y_position, item.as_bytes());
@@ -74,7 +74,7 @@ pub fn style_menu_index(stdout: &mut Stdout, index: i32, is_reset_required: Menu
         // The base menu starts as dimensions.1 / 7
         // When the first item is written we add one...
         // As the number as already been decremented, we add 1
-        let next_y_center = dimensions.1 / 7 + index as u16 + 2;
+        let next_y_center = dimensions.1 / 7 + index as u16 + 1 + 1;
         stdout
             .execute(MoveTo(previous_x_center, next_y_center))
             .unwrap();

@@ -10,7 +10,7 @@ pub mod render;
 
 pub const NUM_ROWS:usize = 20;
 pub const NUM_COLS: usize = 40;
-pub const MENU_ITEMS:[&str;8] = ["Play game", "Options","Information", "Quit game", "testing", "testing2","testing3","testing4"];
+pub const MENU_ITEMS:[&str;9] = ["Play game", "Options","Information", "Quit game", "testing", "testing2","testing3","testing4","testing5"];
 #[derive(PartialEq)]
 pub enum MenuResetRequired {
     UpKey,
