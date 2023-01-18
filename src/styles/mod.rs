@@ -20,7 +20,7 @@ pub fn render_background_color(stdout: &mut Stdout, clear: bool) {
 pub fn get_terminal_dimensions() -> (u16, u16) {
     size().unwrap()
 }
-pub fn write_menu_options(stdout: &mut Stdout, menu_options: [&str; 3], initial_y: u16) {
+pub fn write_menu_options(stdout: &mut Stdout, menu_options: [&str; 8], initial_y: u16) {
     let mut y_position = initial_y + 1;
     for item in menu_options {
         write_centered_text(stdout, y_position, item.as_bytes());
