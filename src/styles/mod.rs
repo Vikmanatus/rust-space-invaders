@@ -1,9 +1,9 @@
 use std::io::{Stdout, Write};
 
 use crossterm::{
-    cursor::{MoveTo},
-    style::{ Color, SetBackgroundColor},
-    terminal::{ size, Clear, ClearType},
+    cursor::MoveTo,
+    style::{Color, SetBackgroundColor, SetForegroundColor, ResetColor},
+    terminal::{size, Clear, ClearType},
     ExecutableCommand,
 };
 
@@ -31,15 +31,27 @@ pub fn write_text_in_terminal(stdout: &mut Stdout, x_position: u16, y_position: 
 }
 
 pub fn write_centered_text(stdout: &mut Stdout, y_position: u16, buf: &[u8]) {
-    let x = (get_terminal_dimensions().0 - buf.len() as u16) / 2;
+    let x = calculate_x_center_text(buf);
     stdout.execute(MoveTo(x, y_position)).unwrap();
     stdout.write_all(buf).unwrap();
 }
+pub fn calculate_x_center_text(buf: &[u8]) -> u16 {
+    (get_terminal_dimensions().0 - buf.len() as u16) / 2
+}
 
-pub fn style_menu_index(stdout: &mut Stdout, index:  i32){
+pub fn style_menu_index(stdout: &mut Stdout, index: i32) {
+    // First we need to unselect the previous menu item
+    // TO DO: make the following block optional with a check to avoid any useless loop
+    // if index > 1 {
+    //     let previous_menu_item = MENU_ITEMS[index as usize];
+
+    // }
     let menu_item = MENU_ITEMS[index as usize];
     let dimensions = get_terminal_dimensions();
-    let x_center = (dimensions.0 - menu_item.as_bytes().len() as u16) / 2;
-    stdout.execute(MoveTo(x_center,dimensions.1/7)).unwrap();
-
+    let x_center = calculate_x_center_text(menu_item.as_bytes());
+    stdout.execute(MoveTo(x_center, dimensions.1 / 7 + index as u16+1)).unwrap();
+    stdout.execute(SetBackgroundColor(Color::White)).unwrap();
+    stdout.write_all(menu_item.as_bytes()).unwrap();
+    stdout.execute(MoveTo(x_center+10, dimensions.1 / 7)).unwrap();
+    stdout.execute(ResetColor).unwrap();
 }
