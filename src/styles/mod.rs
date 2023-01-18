@@ -7,6 +7,8 @@ use crossterm::{
     ExecutableCommand,
 };
 
+use crate::game_utils::MENU_ITEMS;
+
 pub fn render_background_color(stdout: &mut Stdout, clear: bool) {
     stdout.execute(SetBackgroundColor(Color::Blue)).unwrap();
     if clear {
@@ -32,4 +34,12 @@ pub fn write_centered_text(stdout: &mut Stdout, y_position: u16, buf: &[u8]) {
     let x = (get_terminal_dimensions().0 - buf.len() as u16) / 2;
     stdout.execute(MoveTo(x, y_position)).unwrap();
     stdout.write_all(buf).unwrap();
+}
+
+pub fn style_menu_index(stdout: &mut Stdout, index:  i32){
+    let menu_item = MENU_ITEMS[index as usize];
+    let dimensions = get_terminal_dimensions();
+    let x_center = (dimensions.0 - menu_item.as_bytes().len() as u16) / 2;
+    stdout.execute(MoveTo(x_center,dimensions.1/7)).unwrap();
+
 }
