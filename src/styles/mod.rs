@@ -60,28 +60,21 @@ pub fn style_menu_index(stdout: &mut Stdout, index: i32, is_reset_required: Menu
         stdout
             .execute(MoveTo(previous_x_center, previous_y_center))
             .unwrap();
-        // stdout.execute(SetBackgroundColor(Color::Red)).unwrap();
         stdout
             .execute(PrintStyledContent(
                 previous_menu_item.with(Color::Black).on(Color::Blue),
             ))
             .unwrap();
-        stdout
-            .execute(MoveTo(previous_x_center + 10, previous_y_center))
-            .unwrap();
-
-        // stdout.execute(SetBackgroundColor(Color::Blue)).unwrap();
-
-        // // stdout.write_all(previous_menu_item.as_bytes()).unwrap();
-        // stdout.execute(MoveTo(previous_x_center+10, dimensions.1 / 7)).unwrap();
-        // stdout.execute(ResetColor).unwrap();
     }
     if is_reset_required == MenuResetRequired::UpKey {
         // When we are going up, the "previous" item will in fact be next one
         // So we have to unhighlight the next element
         let next_menu_item = MENU_ITEMS[index as usize + 1];
         let previous_x_center = calculate_x_center_text(next_menu_item.as_bytes());
-        let next_y_center = dimensions.1 / 7 + index as u16;
+        // The base menu starts as dimensions.1 / 7
+        // When the first item is written we add one...
+        // As the number as already been decremented, we add 1
+        let next_y_center = dimensions.1 / 7 + index as u16 + 2;
         stdout
             .execute(MoveTo(previous_x_center, next_y_center))
             .unwrap();
@@ -99,8 +92,9 @@ pub fn style_menu_index(stdout: &mut Stdout, index: i32, is_reset_required: Menu
     let x_center = calculate_x_center_text(menu_item.as_bytes());
     let y_center = dimensions.1 / 7 + index as u16 + 1;
     stdout.execute(MoveTo(x_center, y_center)).unwrap();
+    // stdout.execute(PrintStyledContent(menu_item.to_string().with(Color::Black).on(Color::Blue))).unwrap();
     stdout.execute(SetBackgroundColor(Color::White)).unwrap();
     stdout.write_all(menu_item.as_bytes()).unwrap();
     stdout.execute(MoveTo(x_center + 10, y_center)).unwrap();
-    stdout.execute(ResetColor).unwrap();
+    // stdout.execute(ResetColor).unwrap();
 }

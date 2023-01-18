@@ -41,7 +41,7 @@ fn main() -> Result<(), Box<dyn Error>> {
             if let Event::Key(key_code) = read()? {
                 match key_code.code {
                     KeyCode::Up => {
-                        if current_menu_index - 1 > 0 {
+                        if current_menu_index - 1 >= 0 {
                             // Need to update the UI of the menu
                             current_menu_index -= 1;
                             style_menu_index(&mut stdout, current_menu_index, MenuResetRequired::UpKey);
