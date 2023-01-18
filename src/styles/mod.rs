@@ -2,12 +2,14 @@ use std::io::{Stdout, Write};
 
 use crossterm::{
     cursor::MoveTo,
-    style::{Color, SetBackgroundColor, SetForegroundColor, ResetColor},
+    style::{
+        Color, PrintStyledContent, ResetColor, SetBackgroundColor, SetForegroundColor, Stylize,
+    },
     terminal::{size, Clear, ClearType},
     ExecutableCommand,
 };
 
-use crate::game_utils::MENU_ITEMS;
+use crate::game_utils::{MenuResetRequired, MENU_ITEMS};
 
 pub fn render_background_color(stdout: &mut Stdout, clear: bool) {
     stdout.execute(SetBackgroundColor(Color::Blue)).unwrap();
@@ -39,28 +41,66 @@ pub fn calculate_x_center_text(buf: &[u8]) -> u16 {
     (get_terminal_dimensions().0 - buf.len() as u16) / 2
 }
 
-pub fn style_menu_index(stdout: &mut Stdout, index: i32) {
+fn create_spaces_string(num_spaces: i32) -> String {
+    let mut spaces = String::new();
+    for _ in 0..num_spaces {
+        spaces.push(' ');
+    }
+    spaces
+}
+pub fn style_menu_index(stdout: &mut Stdout, index: i32, is_reset_required: MenuResetRequired) {
     // First we need to unselect the previous menu item
     // TO DO: make the following block optional with a check to avoid any useless loop
     let dimensions = get_terminal_dimensions();
 
-    if index > 1 {
-        let previous_menu_item = MENU_ITEMS[index as usize -1];
+    if is_reset_required == MenuResetRequired::DownKey {
+        let previous_menu_item = MENU_ITEMS[index as usize - 1];
         let previous_x_center = calculate_x_center_text(previous_menu_item.as_bytes());
-        stdout.execute(MoveTo(previous_x_center, dimensions.1 / 7 + index as u16)).unwrap();
-        stdout.execute(SetBackgroundColor(Color::Blue)).unwrap();
+        let previous_y_center = dimensions.1 / 7 + index as u16;
+        stdout
+            .execute(MoveTo(previous_x_center, previous_y_center))
+            .unwrap();
+        // stdout.execute(SetBackgroundColor(Color::Red)).unwrap();
+        stdout
+            .execute(PrintStyledContent(
+                previous_menu_item.with(Color::Black).on(Color::Blue),
+            ))
+            .unwrap();
+        stdout
+            .execute(MoveTo(previous_x_center + 10, previous_y_center))
+            .unwrap();
 
-        stdout.write_all(previous_menu_item.as_bytes()).unwrap();
-        stdout.execute(MoveTo(previous_x_center+10, dimensions.1 / 7)).unwrap();
-        stdout.execute(ResetColor).unwrap();
+        // stdout.execute(SetBackgroundColor(Color::Blue)).unwrap();
 
-
+        // // stdout.write_all(previous_menu_item.as_bytes()).unwrap();
+        // stdout.execute(MoveTo(previous_x_center+10, dimensions.1 / 7)).unwrap();
+        // stdout.execute(ResetColor).unwrap();
+    }
+    if is_reset_required == MenuResetRequired::UpKey {
+        // When we are going up, the "previous" item will in fact be next one
+        // So we have to unhighlight the next element
+        let next_menu_item = MENU_ITEMS[index as usize + 1];
+        let previous_x_center = calculate_x_center_text(next_menu_item.as_bytes());
+        let next_y_center = dimensions.1 / 7 + index as u16;
+        stdout
+            .execute(MoveTo(previous_x_center, next_y_center))
+            .unwrap();
+        // stdout.execute(SetBackgroundColor(Color::Red)).unwrap();
+        stdout
+            .execute(PrintStyledContent(
+                next_menu_item.with(Color::Black).on(Color::Blue),
+            ))
+            .unwrap();
+        stdout
+            .execute(MoveTo(previous_x_center + 10, next_y_center))
+            .unwrap();
     }
     let menu_item = MENU_ITEMS[index as usize];
     let x_center = calculate_x_center_text(menu_item.as_bytes());
-    stdout.execute(MoveTo(x_center, dimensions.1 / 7 + index as u16+1)).unwrap();
+    let y_center = dimensions.1 / 7 + index as u16 + 1;
+    stdout.execute(MoveTo(x_center, y_center)).unwrap();
     stdout.execute(SetBackgroundColor(Color::White)).unwrap();
     stdout.write_all(menu_item.as_bytes()).unwrap();
-    stdout.execute(MoveTo(x_center+10, dimensions.1 / 7)).unwrap();
+    stdout.execute(MoveTo(x_center + 10, y_center)).unwrap();
     stdout.execute(ResetColor).unwrap();
 }

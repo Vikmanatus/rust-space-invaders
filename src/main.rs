@@ -11,7 +11,7 @@ use crossterm::{
 use rusty_audio::Audio;
 
 use crate::{
-    game_utils::{add_sounds, render::render_welcome_screen, MENU_ITEMS, NUM_COLS, NUM_ROWS},
+    game_utils::{add_sounds, render::render_welcome_screen, MENU_ITEMS, NUM_COLS, NUM_ROWS, MenuResetRequired},
     styles::style_menu_index,
 };
 
@@ -34,7 +34,7 @@ fn main() -> Result<(), Box<dyn Error>> {
     render_welcome_screen(&mut stdout);
 
     let mut current_menu_index = 0;
-
+    style_menu_index(&mut stdout, current_menu_index, MenuResetRequired::None);
     // We will need a game loop in which we can create the elements of the game
     'gameloop: loop {
         while poll(Duration::default())? {
@@ -44,14 +44,14 @@ fn main() -> Result<(), Box<dyn Error>> {
                         if current_menu_index - 1 > 0 {
                             // Need to update the UI of the menu
                             current_menu_index -= 1;
-                            style_menu_index(&mut stdout, current_menu_index);
+                            style_menu_index(&mut stdout, current_menu_index, MenuResetRequired::UpKey);
                         }
                     }
                     KeyCode::Down => {
                         let debug="";
                         if current_menu_index + 1 < MENU_ITEMS.len() as i32 {
                             current_menu_index+=1;
-                            style_menu_index(&mut stdout, current_menu_index);
+                            style_menu_index(&mut stdout, current_menu_index, MenuResetRequired::DownKey);
                         }
                     }
                     KeyCode::Esc | KeyCode::Char('q') => {

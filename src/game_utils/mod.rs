@@ -11,7 +11,12 @@ pub mod render;
 pub const NUM_ROWS:usize = 20;
 pub const NUM_COLS: usize = 40;
 pub const MENU_ITEMS:[&str;3] = ["Play game", "Options", "Quit game"];
-
+#[derive(PartialEq)]
+pub enum MenuResetRequired {
+    UpKey,
+    DownKey,
+    None
+}
 pub fn add_sounds(audio: &mut Audio, path: String) {
     println!("{}" , path);
     
