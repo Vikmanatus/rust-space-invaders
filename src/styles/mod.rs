@@ -1,9 +1,9 @@
 use std::io::{Stdout, Write};
 
 use crossterm::{
-    cursor::{MoveTo, MoveToNextLine},
-    style::{self, style, Color, SetBackgroundColor, Stylize},
-    terminal::{self, size, Clear, ClearType},
+    cursor::{MoveTo},
+    style::{ Color, SetBackgroundColor},
+    terminal::{ size, Clear, ClearType},
     ExecutableCommand,
 };
 
