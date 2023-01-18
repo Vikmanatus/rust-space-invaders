@@ -6,7 +6,7 @@ use rusty_audio::Audio;
 
 
 pub mod render;
-
+pub mod frame;
 pub const NUM_ROWS:usize = 20;
 pub const NUM_COLS: usize = 40;
 pub const MENU_ITEMS:[&str;2] = ["Play game", "Quit game"];
