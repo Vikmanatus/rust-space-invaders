@@ -11,7 +11,10 @@ use crossterm::{
 use rusty_audio::Audio;
 
 use crate::{
-    game_utils::{add_sounds, render::render_welcome_screen, MENU_ITEMS, NUM_COLS, NUM_ROWS, MenuResetRequired},
+    game_utils::{
+        add_sounds, render::render_welcome_screen, MenuResetRequired, MENU_ITEMS, NUM_COLS,
+        NUM_ROWS,
+    },
     styles::style_menu_index,
 };
 
@@ -44,15 +47,30 @@ fn main() -> Result<(), Box<dyn Error>> {
                         if current_menu_index - 1 >= 0 {
                             // Need to update the UI of the menu
                             current_menu_index -= 1;
-                            style_menu_index(&mut stdout, current_menu_index, MenuResetRequired::UpKey);
+                            style_menu_index(
+                                &mut stdout,
+                                current_menu_index,
+                                MenuResetRequired::UpKey,
+                            );
                         }
                     }
                     KeyCode::Down => {
                         if current_menu_index + 1 < MENU_ITEMS.len() as i32 {
-                            current_menu_index+=1;
-                            style_menu_index(&mut stdout, current_menu_index, MenuResetRequired::DownKey);
+                            current_menu_index += 1;
+                            style_menu_index(
+                                &mut stdout,
+                                current_menu_index,
+                                MenuResetRequired::DownKey,
+                            );
                         }
                     }
+                    KeyCode::Enter => match current_menu_index {
+                        0 => {}
+                        1 => {
+                            break 'gameloop;
+                        }
+                        _ => {}
+                    },
                     KeyCode::Esc | KeyCode::Char('q') => {
                         break 'gameloop;
                     }
@@ -72,4 +90,3 @@ fn main() -> Result<(), Box<dyn Error>> {
     terminal::disable_raw_mode()?;
     Ok(())
 }
-
