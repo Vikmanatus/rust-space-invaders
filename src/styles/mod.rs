@@ -49,44 +49,40 @@ fn create_spaces_string(num_spaces: i32) -> String {
     spaces
 }
 pub fn style_menu_index(stdout: &mut Stdout, index: i32, is_reset_required: MenuResetRequired) {
-    // First we need to unselect the previous menu item
-    // TO DO: make the following block optional with a check to avoid any useless loop
     let dimensions = get_terminal_dimensions();
 
     if is_reset_required == MenuResetRequired::DownKey {
         let previous_menu_item = MENU_ITEMS[index as usize - 1];
-        let previous_x_center = calculate_x_center_text(previous_menu_item.as_bytes());
         let previous_y_center = dimensions.1 / 7 + index as u16;
-        stdout
-            .execute(MoveTo(previous_x_center, previous_y_center))
-            .unwrap();
-        stdout
-            .execute(PrintStyledContent(
-                previous_menu_item.with(Color::Black).on(Color::Blue),
-            ))
-            .unwrap();
+
+        style_menu_item(previous_menu_item, previous_y_center, stdout, Color::Blue);
     }
+
     if is_reset_required == MenuResetRequired::UpKey {
         let next_menu_item = MENU_ITEMS[index as usize + 1];
-        let previous_x_center = calculate_x_center_text(next_menu_item.as_bytes());
         let next_y_center = dimensions.1 / 7 + index as u16 + 1 + 1;
-        stdout
-            .execute(MoveTo(previous_x_center, next_y_center))
-            .unwrap();
 
-        stdout
-            .execute(PrintStyledContent(
-                next_menu_item.with(Color::Black).on(Color::Blue),
-            ))
-            .unwrap();
+        style_menu_item(next_menu_item, next_y_center, stdout, Color::Blue);
     }
+
     let menu_item = MENU_ITEMS[index as usize];
-    let x_center = calculate_x_center_text(menu_item.as_bytes());
     let y_center = dimensions.1 / 7 + index as u16 + 1;
+
+    style_menu_item(menu_item, y_center, stdout, Color::White);
+}
+
+pub fn style_menu_item(
+    menu_item: &str,
+    y_center: u16,
+    stdout: &mut Stdout,
+    background_color: Color,
+) {
+    let x_center = calculate_x_center_text(menu_item.as_bytes());
+
     stdout.execute(MoveTo(x_center, y_center)).unwrap();
-    // stdout.execute(PrintStyledContent(menu_item.to_string().with(Color::Black).on(Color::Blue))).unwrap();
-    stdout.execute(SetBackgroundColor(Color::White)).unwrap();
-    stdout.write_all(menu_item.as_bytes()).unwrap();
-    stdout.execute(MoveTo(x_center + 10, y_center)).unwrap();
-    // stdout.execute(ResetColor).unwrap();
+    stdout
+        .execute(PrintStyledContent(
+            menu_item.with(Color::Black).on(background_color),
+        ))
+        .unwrap();
 }
