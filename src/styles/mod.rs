@@ -42,12 +42,21 @@ pub fn calculate_x_center_text(buf: &[u8]) -> u16 {
 pub fn style_menu_index(stdout: &mut Stdout, index: i32) {
     // First we need to unselect the previous menu item
     // TO DO: make the following block optional with a check to avoid any useless loop
-    // if index > 1 {
-    //     let previous_menu_item = MENU_ITEMS[index as usize];
-
-    // }
-    let menu_item = MENU_ITEMS[index as usize];
     let dimensions = get_terminal_dimensions();
+
+    if index > 1 {
+        let previous_menu_item = MENU_ITEMS[index as usize -1];
+        let previous_x_center = calculate_x_center_text(previous_menu_item.as_bytes());
+        stdout.execute(MoveTo(previous_x_center, dimensions.1 / 7 + index as u16)).unwrap();
+        stdout.execute(SetBackgroundColor(Color::Blue)).unwrap();
+
+        stdout.write_all(previous_menu_item.as_bytes()).unwrap();
+        stdout.execute(MoveTo(previous_x_center+10, dimensions.1 / 7)).unwrap();
+        stdout.execute(ResetColor).unwrap();
+
+
+    }
+    let menu_item = MENU_ITEMS[index as usize];
     let x_center = calculate_x_center_text(menu_item.as_bytes());
     stdout.execute(MoveTo(x_center, dimensions.1 / 7 + index as u16+1)).unwrap();
     stdout.execute(SetBackgroundColor(Color::White)).unwrap();
