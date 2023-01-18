@@ -10,7 +10,7 @@
 use std::io::Stdout;
 
 use crate::{styles::{
-    get_terminal_dimensions, render_background_color, write_menu_options, write_text_in_terminal,
+    get_terminal_dimensions, render_background_color, write_menu_options, write_text_in_terminal, write_centered_text,
 }, game_utils::MENU_ITEMS};
 
 // So as for the game rendering,  we will need to have access to a terminal, in that way we will be able to customize the screen
@@ -20,8 +20,9 @@ pub fn render_welcome_screen(stdout: &mut Stdout) {
     let welcome_text = b"Welcome to space-invaders rust";
     let menu_items = MENU_ITEMS;
 
-    write_text_in_terminal(stdout, dimnesions.0 / 3, dimnesions.1 / 10, welcome_text);
-    write_menu_options(stdout, menu_items, dimnesions.1 / 8);
+    write_centered_text(stdout, dimnesions.1 / 10, welcome_text);
+    write_menu_options(stdout, menu_items, dimnesions.1 / 7);
+
     println!("\n");
     // stdout.write(b"Welcome to rust-space-invaders").unwrap();
 }
