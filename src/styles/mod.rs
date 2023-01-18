@@ -67,25 +67,17 @@ pub fn style_menu_index(stdout: &mut Stdout, index: i32, is_reset_required: Menu
             .unwrap();
     }
     if is_reset_required == MenuResetRequired::UpKey {
-        // When we are going up, the "previous" item will in fact be next one
-        // So we have to unhighlight the next element
         let next_menu_item = MENU_ITEMS[index as usize + 1];
         let previous_x_center = calculate_x_center_text(next_menu_item.as_bytes());
-        // The base menu starts as dimensions.1 / 7
-        // When the first item is written we add one...
-        // As the number as already been decremented, we add 1
         let next_y_center = dimensions.1 / 7 + index as u16 + 1 + 1;
         stdout
             .execute(MoveTo(previous_x_center, next_y_center))
             .unwrap();
-        // stdout.execute(SetBackgroundColor(Color::Red)).unwrap();
+
         stdout
             .execute(PrintStyledContent(
                 next_menu_item.with(Color::Black).on(Color::Blue),
             ))
-            .unwrap();
-        stdout
-            .execute(MoveTo(previous_x_center + 10, next_y_center))
             .unwrap();
     }
     let menu_item = MENU_ITEMS[index as usize];
