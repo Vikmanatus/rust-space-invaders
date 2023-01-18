@@ -67,13 +67,15 @@ fn main() -> Result<(), Box<dyn Error>> {
                     KeyCode::Enter => match current_menu_index {
                         0 => {}
                         1 => {
+                            play_goodbye_song(&mut audio);
                             break 'gameloop;
                         }
                         _ => {}
                     },
-                    KeyCode::Esc | KeyCode::Char('q') => {
-                        break 'gameloop;
-                    }
+                    // KeyCode::Esc | KeyCode::Char('q') => {
+                    //     play_goodbye_song(&mut audio);
+                    //     break 'gameloop;
+                    // }
                     _ => {}
                 }
             }
@@ -89,4 +91,9 @@ fn main() -> Result<(), Box<dyn Error>> {
     stdout.execute(LeaveAlternateScreen)?;
     terminal::disable_raw_mode()?;
     Ok(())
+}
+
+fn play_goodbye_song(audio: &mut Audio){
+    audio.play("goodbye");
+    audio.wait();
 }
