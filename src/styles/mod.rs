@@ -19,18 +19,17 @@ pub fn get_terminal_dimensions() -> (u16, u16) {
 pub fn write_menu_options(
     stdout: &mut Stdout,
     menu_options: [&str; 3],
-    initial_x: u16,
     initial_y: u16,
 ) {
     stdout.execute(MoveTo(0, initial_y)).unwrap();
-    let mut loop_number = 0;
+    // let mut loop_number = 0;
     for item in menu_options {
-        loop_number += 1;
-        if loop_number == 1 {
-            stdout.execute(SetBackgroundColor(Color::White)).unwrap();
-        } else {
-            stdout.execute(SetBackgroundColor(Color::Blue)).unwrap();
-        }
+        // loop_number += 1;
+        // if loop_number == 1 {
+        //     stdout.execute(SetBackgroundColor(Color::White)).unwrap();
+        // } else {
+        //     stdout.execute(SetBackgroundColor(Color::Blue)).unwrap();
+        // }
         stdout.write_all(item.as_bytes()).unwrap();
         stdout.execute(MoveToNextLine(1)).unwrap();
     }

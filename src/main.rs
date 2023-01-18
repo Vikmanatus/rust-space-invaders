@@ -29,13 +29,17 @@ fn main() -> Result<(), Box<dyn Error>> {
     stdout.execute(Hide)?;
     audio.play("welcome");
     render_welcome_screen(&mut stdout);
-
+    let mut current_menu_index = 0;
 
     // We will need a game loop in which we can create the elements of the game
     'gameloop: loop {
         while poll(Duration::default())? {
             if let Event::Key(key_code) = read()? {
                 match key_code.code {
+                    KeyCode::Up => {
+                        
+                        // Need to update the UI of the menu
+                    }
                     KeyCode::Esc | KeyCode::Char('q') => {
                         break 'gameloop;
                     }
@@ -55,7 +59,6 @@ fn main() -> Result<(), Box<dyn Error>> {
     terminal::disable_raw_mode()?;
     Ok(())
 }
-
 
 // use crossterm::{event::{read, Event, KeyCode}, terminal::enable_raw_mode};
 

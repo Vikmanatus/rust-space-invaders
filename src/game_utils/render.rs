@@ -7,28 +7,21 @@
 
 // The first method we need to do is to create a welcome screen
 
-use std::io::{Stdout, Write};
+use std::io::Stdout;
 
-use crossterm::{
-    cursor::MoveTo,
-    style::{Color, SetBackgroundColor, SetStyle},
-    terminal::{self, Clear, ClearType},
-    ExecutableCommand, QueueableCommand,
-};
-
-use crate::styles::{
+use crate::{styles::{
     get_terminal_dimensions, render_background_color, write_menu_options, write_text_in_terminal,
-};
+}, game_utils::MENU_ITEMS};
 
 // So as for the game rendering,  we will need to have access to a terminal, in that way we will be able to customize the screen
 pub fn render_welcome_screen(stdout: &mut Stdout) {
     render_background_color(stdout, true);
     let dimnesions = get_terminal_dimensions();
     let welcome_text = b"Welcome to space-invaders rust";
-    let menu_items = ["Play game", "Options", "Quit game"];
+    let menu_items = MENU_ITEMS;
 
-    write_text_in_terminal(stdout, dimnesions.0 / 2, dimnesions.1 / 10, welcome_text);
-    write_menu_options(stdout, menu_items, dimnesions.0 / 4, dimnesions.1 / 8);
+    write_text_in_terminal(stdout, dimnesions.0 / 3, dimnesions.1 / 10, welcome_text);
+    write_menu_options(stdout, menu_items, dimnesions.1 / 8);
     println!("\n");
     // stdout.write(b"Welcome to rust-space-invaders").unwrap();
 }

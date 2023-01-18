@@ -3,10 +3,14 @@ use std::fs::read_dir;
 use regex::Regex;
 use rusty_audio::Audio;
 
+use crate::styles::get_terminal_dimensions;
+
 pub mod render;
 
 pub const NUM_ROWS:usize = 20;
 pub const NUM_COLS: usize = 40;
+pub const MENU_ITEMS:[&str;3] = ["Play game", "Options", "Quit game"];
+
 
 pub fn add_sounds(audio: &mut Audio, path: String) {
     println!("{}" , path);
