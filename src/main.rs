@@ -12,8 +12,8 @@ use rusty_audio::Audio;
 
 use crate::{
     game_utils::{
-        add_sounds, frame::new_frame, lauch_game_thread, render::render_welcome_screen,
-        MenuResetRequired, MENU_ITEMS, NUM_COLS, NUM_ROWS,
+        add_sounds, frame::{new_frame, Drawable}, lauch_game_thread, render::render_welcome_screen,
+        MenuResetRequired, MENU_ITEMS, NUM_COLS, NUM_ROWS, player::Player,
     },
     styles::style_menu_index,
 };
@@ -89,12 +89,22 @@ fn main() -> Result<(), Box<dyn Error>> {
         let render_handler = lauch_game_thread(render_rx);
         audio.play("start_game");
         audio.wait();
+
+        // Game loop
+        // Initializing player
+        let mut player = Player::new();
         'gameloop: loop {
             // Per-frame init
-            let curr_frame = new_frame();
+            let mut curr_frame = new_frame();
             while poll(Duration::default())? {
                 if let Event::Key(key_code) = read()? {
                     match key_code.code {
+                        KeyCode::Left => {
+                            player.move_left();
+                        }
+                        KeyCode::Right => {
+                            player.move_right();
+                        }
                         KeyCode::Esc => {
                             play_goodbye_song(&mut audio);
                             break 'gameloop;
@@ -104,6 +114,7 @@ fn main() -> Result<(), Box<dyn Error>> {
                 }
             }
             // Draw & render
+            player.draw(&mut curr_frame);
             let _ = render_tx.send(curr_frame);
             sleep(Duration::from_millis(1));
         }
