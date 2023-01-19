@@ -1,6 +1,6 @@
 mod game_utils;
 mod styles;
-use std::{error::Error, io::stdout, sync::mpsc, thread::sleep, time::Duration};
+use std::{error::Error, io::stdout, sync::mpsc, thread::sleep, time::{Duration, Instant}};
 
 use crossterm::{
     cursor::{Hide, Show},
@@ -93,8 +93,11 @@ fn main() -> Result<(), Box<dyn Error>> {
         // Game loop
         // Initializing player
         let mut player = Player::new();
+        let mut instant = Instant::now();
         'gameloop: loop {
             // Per-frame init
+            let delta = instant.elapsed();
+            instant = Instant::now();
             let mut curr_frame = new_frame();
             while poll(Duration::default())? {
                 if let Event::Key(key_code) = read()? {
@@ -105,6 +108,11 @@ fn main() -> Result<(), Box<dyn Error>> {
                         KeyCode::Right => {
                             player.move_right();
                         }
+                        KeyCode::Char(' ')=> {
+                            if player.shoot() {
+                                audio.play("pew")
+                            }
+                        }
                         KeyCode::Esc => {
                             play_goodbye_song(&mut audio);
                             break 'gameloop;
@@ -113,6 +121,8 @@ fn main() -> Result<(), Box<dyn Error>> {
                     }
                 }
             }
+            //Updates
+            player.update(delta);
             // Draw & render
             player.draw(&mut curr_frame);
             let _ = render_tx.send(curr_frame);
@@ -123,7 +133,6 @@ fn main() -> Result<(), Box<dyn Error>> {
         render_handler.join().unwrap();
     }
     // audio.wait(); // Block until sounds welcome sound finishes playing
-
     // Killing the app and terminating the program
     // Need to create a render engine so we can draw elements into the terminal
     stdout.execute(Show)?;
