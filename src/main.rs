@@ -1,27 +1,18 @@
 mod game_utils;
 mod styles;
-use std::{
-    error::Error,
-    io::{ stdout},
-    sync::mpsc,
-    thread::{ sleep},
-    time::Duration,
-};
+use std::{error::Error, io::stdout, sync::mpsc, thread::sleep, time::Duration};
 
 use crossterm::{
     cursor::{Hide, Show},
     event::{poll, read, Event, KeyCode},
-    terminal::{self,  EnterAlternateScreen, LeaveAlternateScreen},
+    terminal::{self, EnterAlternateScreen, LeaveAlternateScreen},
     ExecutableCommand,
 };
 use rusty_audio::Audio;
 
 use crate::{
     game_utils::{
-        add_sounds,
-        frame::{ new_frame},
-        lauch_game_thread,
-        render::{ render_welcome_screen},
+        add_sounds, frame::new_frame, lauch_game_thread, render::render_welcome_screen,
         MenuResetRequired, MENU_ITEMS, NUM_COLS, NUM_ROWS,
     },
     styles::style_menu_index,
